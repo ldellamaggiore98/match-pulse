@@ -9,7 +9,7 @@ import { startScheduler } from "./scheduler.js";
 const app = express();
 const httpServer = createServer(app);
 
-const FRONTEND_URL = process.env.FRONTEND_URL || "*";
+const FRONTEND_URL = (process.env.FRONTEND_URL || "*").replace(/\/$/, "");
 
 export const io = new Server(httpServer, {
   cors: { origin: FRONTEND_URL }
