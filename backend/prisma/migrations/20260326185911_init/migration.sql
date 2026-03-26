@@ -1,0 +1,8 @@
+-- CreateTable
+CREATE TABLE "Standing" (
+    "id" INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+    "team" TEXT NOT NULL,
+    "points" TEXT NOT NULL,
+    "group" TEXT NOT NULL,
+    "createdAt" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
+);

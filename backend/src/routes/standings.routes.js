@@ -1,25 +1,31 @@
 import { Router } from "express";
 import { getStandings } from "../../../scraper/src/scrapers/standings.scraper.js";
+import { prisma } from "../lib/prisma.js";
 
 const router = Router();
 
-let cache = null;
-let lastFetch = 0;
-const CACHE_TIME = 1000 * 60 * 5;
-
-router.get("/", async (req, res) => {
+// GET /standings/update — scrapes latest standings and replaces all existing records
+router.get("/update", async (req, res) => {
   try {
-    const now = Date.now();
-
-    // 🧠 usar cache si es válido
-    if (cache && now - lastFetch < CACHE_TIME) {
-      console.log("⚡ Serving from cache");
-      return res.json(cache);
-    }
-
-    console.log("🐢 Fetching new data...");
+    console.log("Scraping standings...");
 
     const data = await getStandings();
+
+    // Replace stale records with fresh scraped data
+    await prisma.standing.deleteMany();
+    await prisma.standing.createMany({ data });
+
+    res.json({ message: "Standings updated successfully" });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Error updating standings" });
+  }
+});
+
+// GET /standings — returns cached standings from DB, split by group
+router.get("/", async (req, res) => {
+  try {
+    const data = await prisma.standing.findMany();
 
     const groupA = data
       .filter((t) => t.group === "A")
@@ -29,13 +35,7 @@ router.get("/", async (req, res) => {
       .filter((t) => t.group === "B")
       .map(({ group, ...rest }) => rest);
 
-    const formatted = { groupA, groupB };
-
-    // 💾 guardar en cache
-    cache = formatted;
-    lastFetch = now;
-
-    res.json(formatted);
+    res.json({ groupA, groupB });
   } catch (error) {
     res.status(500).json({ error: "Error fetching standings" });
   }
