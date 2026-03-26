@@ -13,3 +13,17 @@ model Standing {
   group     String
   createdAt DateTime @default(now())
 }
+
+model Match {
+  id           Int      @id @default(autoincrement())
+  flashscoreId String   @unique
+  homeTeam     String
+  awayTeam     String
+  homeScore    Int?
+  awayScore    Int?
+  status       String
+  minute       String?
+  matchDate    DateTime
+  competition  String
+  updatedAt    DateTime @updatedAt
+}
