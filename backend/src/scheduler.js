@@ -2,6 +2,7 @@ import cron from "node-cron";
 import { getStandings } from "../../scraper/src/scrapers/standings.scraper.js";
 import { getMatches } from "../../scraper/src/scrapers/matches.scraper.js";
 import { prisma } from "./lib/prisma.js";
+import { io } from "./server.js";
 
 let livePollingInterval = null;
 
@@ -39,6 +40,14 @@ async function updateMatches() {
         })
       )
     );
+
+    // Push updated matches to all connected clients
+    const updated = await prisma.match.findMany({ orderBy: { matchDate: "asc" } });
+    io.emit("matches:updated", {
+      live: updated.filter((m) => m.status === "LIVE"),
+      upcoming: updated.filter((m) => m.status === "NS"),
+      finished: updated.filter((m) => m.status === "FT"),
+    });
   } catch (error) {
     console.error("[scheduler] Failed to update matches:", error.message);
   }
