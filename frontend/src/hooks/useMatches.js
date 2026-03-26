@@ -1,7 +1,9 @@
 import { useEffect, useState } from 'react';
 import { io } from 'socket.io-client';
 
-const socket = io('http://localhost:3000', { autoConnect: false });
+const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000';
+
+const socket = io(API_URL, { autoConnect: false });
 
 export function useMatches() {
   const [matches, setMatches] = useState({ live: [], upcoming: [], finished: [] });
@@ -9,7 +11,7 @@ export function useMatches() {
   const [connected, setConnected] = useState(false);
 
   useEffect(() => {
-    fetch('http://localhost:3000/matches')
+    fetch(`${API_URL}/matches`)
       .then((r) => r.json())
       .then((data) => {
         setMatches(data);

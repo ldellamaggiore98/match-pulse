@@ -1,11 +1,13 @@
 import { useEffect, useState } from 'react';
 
+const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000';
+
 export function useStandings() {
   const [standings, setStandings] = useState({ groupA: [], groupB: [] });
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    fetch('http://localhost:3000/standings')
+    fetch(`${API_URL}/standings`)
       .then((r) => r.json())
       .then((data) => {
         setStandings(data);

@@ -2,7 +2,9 @@ import puppeteer from "puppeteer";
 
 export const getStandings = async () => {
   const browser = await puppeteer.launch({
-    headless: true
+    headless: true,
+    executablePath: process.env.PUPPETEER_EXECUTABLE_PATH || undefined,
+    args: ["--no-sandbox", "--disable-setuid-sandbox"],
   });
 
   const page = await browser.newPage();

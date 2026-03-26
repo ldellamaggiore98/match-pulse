@@ -9,11 +9,13 @@ import { startScheduler } from "./scheduler.js";
 const app = express();
 const httpServer = createServer(app);
 
+const FRONTEND_URL = process.env.FRONTEND_URL || "*";
+
 export const io = new Server(httpServer, {
-  cors: { origin: "*" }
+  cors: { origin: FRONTEND_URL }
 });
 
-app.use(cors());
+app.use(cors({ origin: FRONTEND_URL }));
 app.use(express.json());
 
 app.use("/standings", standingsRoutes);
@@ -26,7 +28,7 @@ io.on("connection", (socket) => {
   });
 });
 
-const PORT = 3000;
+const PORT = process.env.PORT || 3000;
 
 httpServer.listen(PORT, () => {
   console.log(`🚀 MatchPulse API running on port ${PORT}`);

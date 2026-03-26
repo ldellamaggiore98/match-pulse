@@ -1,0 +1,15 @@
+[phases.setup]
+nixPkgs = ["nodejs_20", "chromium", "nss", "freetype", "harfbuzz", "ca-certificates"]
+
+[phases.install]
+cmds = [
+  "npm install --prefix backend",
+  "npm install --prefix scraper",
+  "cd backend && npx prisma generate"
+]
+
+[phases.build]
+cmds = ["cd backend && npx prisma migrate deploy"]
+
+[start]
+cmd = "node backend/src/server.js"

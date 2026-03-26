@@ -151,7 +151,16 @@ async function assess() {
 
 // ─── Entry point ──────────────────────────────────────────────────────────────
 
-export function startScheduler() {
+export async function startScheduler() {
+  // Populate DB on first boot if empty
+  const matchCount = await prisma.match.count();
+  const standingCount = await prisma.standing.count();
+  if (matchCount === 0 || standingCount === 0) {
+    console.log("[scheduler] Empty DB detected, running initial data load...");
+    await updateStandings();
+    await updateMatches();
+  }
+
   // Every day at 06:00 ART (09:00 UTC) — refresh standings and fixture
   cron.schedule("0 9 * * *", async () => {
     await updateStandings();
@@ -163,7 +172,7 @@ export function startScheduler() {
   cron.schedule("0 * * * *", assess, { timezone: "UTC" });
 
   // Initial assessment on startup
-  assess();
+  await assess();
 
   console.log("[scheduler] Started.");
 }
