@@ -1,0 +1,119 @@
+.card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 16px 20px;
+  transition: background 0.15s;
+}
+
+.card:hover {
+  background: var(--bg-card-hover);
+}
+
+.card.live {
+  border-color: var(--live);
+  background: var(--live-dim);
+}
+
+/* Live bar */
+.liveBar {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 12px;
+}
+
+.liveDot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--live);
+  animation: pulse 1.2s ease-in-out infinite;
+}
+
+.liveLabel {
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--live);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+/* Meta (date/time or finished) */
+.meta {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+.date {
+  font-size: 12px;
+  color: var(--text-muted);
+}
+
+.time {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--accent);
+}
+
+.finished {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+/* Teams row */
+.teams {
+  display: grid;
+  grid-template-columns: 1fr 32px 1fr;
+  align-items: center;
+  gap: 8px;
+}
+
+.team {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.away {
+  flex-direction: row-reverse;
+  text-align: right;
+}
+
+.teamName {
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--text-secondary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.winner .teamName {
+  color: var(--text-primary);
+  font-weight: 600;
+}
+
+.score {
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--text-primary);
+  min-width: 24px;
+  text-align: center;
+}
+
+.live .score {
+  color: var(--live);
+}
+
+.vs {
+  text-align: center;
+  font-size: 12px;
+  color: var(--text-muted);
+  font-weight: 500;
+}
