@@ -7,21 +7,22 @@ export const getStandings = async () => {
 
   const page = await browser.newPage();
 
+  await page.setRequestInterception(true);
+  page.on("request", (req) => {
+    const type = req.resourceType();
+    if (["image", "font", "stylesheet", "media"].includes(type)) {
+      req.abort();
+    } else {
+      req.continue();
+    }
+  });
+
   await page.goto(
     "https://www.flashscore.com.ar/futbol/argentina/liga-profesional/clasificacion/KYiWfJVg/clasificacion/general/",
-    { waitUntil: "networkidle2" }
+    { waitUntil: "domcontentloaded" }
   );
 
   await page.waitForSelector(".ui-table");
-  await new Promise((res) => setTimeout(res, 3000));
-
-  const debug = await page.evaluate(() => {
-    return Array.from(document.querySelectorAll(".ui-table")).map((table) =>
-      table.querySelector('.ui-table__headerCell[title^="Grupo"]')?.innerText
-    );
-  });
-
-  console.log("DEBUG GROUPS:", debug);
 
   const data = await page.evaluate(() => {
     const tables = document.querySelectorAll(".ui-table");
