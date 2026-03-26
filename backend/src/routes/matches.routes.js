@@ -24,6 +24,7 @@ router.get("/update", async (req, res) => {
             awayScore: match.awayScore,
             status: match.status,
             minute: match.minute,
+            matchDate: match.matchDate,
           },
           create: match,
         })

@@ -4,21 +4,26 @@ import puppeteer from "puppeteer";
 // Formats: "21:00" (today) or "25.03. 19:00" (other day)
 // Returns a UTC ISO string. Flashscore displays times in ART (UTC-3).
 function parseMatchDate(timeText) {
-  const now = new Date();
   const ART_OFFSET_MS = 3 * 60 * 60 * 1000;
+
+  // Derive today's date in ART by subtracting 3h from UTC
+  const nowUTC = new Date();
+  const nowART = new Date(nowUTC.getTime() - ART_OFFSET_MS);
 
   const todayMatch = timeText.match(/^(\d{2}):(\d{2})$/);
   if (todayMatch) {
     const [, hours, minutes] = todayMatch;
-    const local = new Date(now.getFullYear(), now.getMonth(), now.getDate(), +hours, +minutes);
-    return new Date(local.getTime() + ART_OFFSET_MS).toISOString();
+    // Build the ART time using Date.UTC to avoid system timezone interference
+    const artAsUTC = new Date(Date.UTC(nowART.getUTCFullYear(), nowART.getUTCMonth(), nowART.getUTCDate(), +hours, +minutes));
+    // Convert ART → UTC by adding 3h
+    return new Date(artAsUTC.getTime() + ART_OFFSET_MS).toISOString();
   }
 
   const fullMatch = timeText.match(/^(\d{2})\.(\d{2})\.\s+(\d{2}):(\d{2})$/);
   if (fullMatch) {
     const [, day, month, hours, minutes] = fullMatch;
-    const local = new Date(now.getFullYear(), +month - 1, +day, +hours, +minutes);
-    return new Date(local.getTime() + ART_OFFSET_MS).toISOString();
+    const artAsUTC = new Date(Date.UTC(nowART.getUTCFullYear(), +month - 1, +day, +hours, +minutes));
+    return new Date(artAsUTC.getTime() + ART_OFFSET_MS).toISOString();
   }
 
   return new Date().toISOString();

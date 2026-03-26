@@ -2,6 +2,7 @@ import express from "express";
 import cors from "cors";
 import standingsRoutes from "./routes/standings.routes.js";
 import matchesRoutes from "./routes/matches.routes.js";
+import { startScheduler } from "./scheduler.js";
 
 const app = express();
 
@@ -15,4 +16,5 @@ const PORT = 3000;
 
 app.listen(PORT, () => {
   console.log(`🚀 MatchPulse API running on port ${PORT}`);
+  startScheduler();
 });
