@@ -44,6 +44,7 @@ export const getMatches = async () => {
   });
   const page = await browser.newPage();
 
+  await page.emulateTimezone("America/Argentina/Buenos_Aires");
   await page.setRequestInterception(true);
   page.on("request", (req) => {
     const type = req.resourceType();
