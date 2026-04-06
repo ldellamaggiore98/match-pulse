@@ -20,13 +20,14 @@
   height: 56px;
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  gap: 32px;
 }
 
 .brand {
   display: flex;
   align-items: center;
   gap: 8px;
+  flex-shrink: 0;
 }
 
 .brandDot {
@@ -43,10 +44,43 @@
   color: var(--text-primary);
 }
 
+/* ── Tabs (in header) ───────────────────────────────── */
+.tabs {
+  display: flex;
+  align-items: stretch;
+  gap: 0;
+  height: 100%;
+  flex: 1;
+}
+
+.tabBtn {
+  padding: 0 20px;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--text-muted);
+  border-bottom: 2px solid transparent;
+  transition: color 0.15s, border-color 0.15s;
+  height: 100%;
+  display: flex;
+  align-items: center;
+}
+
+.tabBtn:hover {
+  color: var(--text-secondary);
+}
+
+.tabActive {
+  color: var(--text-primary);
+  border-bottom-color: var(--accent);
+}
+
+/* ── Connection status ──────────────────────────────── */
 .connectionStatus {
   display: flex;
   align-items: center;
   gap: 6px;
+  flex-shrink: 0;
+  margin-left: auto;
 }
 
 .statusDot {
@@ -70,62 +104,31 @@
   color: var(--text-muted);
 }
 
-/* ── Mobile nav (tabs) ───────────────────────────────── */
-.nav {
-  background: var(--bg-secondary);
-  border-bottom: 1px solid var(--border);
-  display: none;
-}
-
-.navInner {
-  padding: 0 16px;
-  display: flex;
-  gap: 4px;
-}
-
-.tab {
-  padding: 12px 16px;
-  font-size: 13px;
-  font-weight: 500;
-  color: var(--text-muted);
-  border-bottom: 2px solid transparent;
-  transition: color 0.15s, border-color 0.15s;
-}
-
-.tab:hover {
-  color: var(--text-secondary);
-}
-
-.tabActive {
-  color: var(--text-primary);
-  border-bottom-color: var(--accent);
-}
-
-/* ── Main layout ─────────────────────────────────────── */
+/* ── Main ───────────────────────────────────────────── */
 .main {
   flex: 1;
   padding: 28px 24px;
 }
 
-.layout {
-  max-width: 1280px;
+/* Matches tab: centered column with max width */
+.matchesLayout {
+  max-width: 800px;
   margin: 0 auto;
-  display: grid;
-  grid-template-columns: 1fr 340px;
-  gap: 24px;
-  align-items: start;
 }
 
-.column,
-.sidebar {
+/* Standings tab: full width */
+.standingsLayout {
+  max-width: 1280px;
+  margin: 0 auto;
   display: flex;
   flex-direction: column;
   gap: 16px;
 }
 
-.sidebar {
-  position: sticky;
-  top: 80px;
+.column {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
 }
 
 .columnTitle {
@@ -134,27 +137,4 @@
   letter-spacing: 0.08em;
   text-transform: uppercase;
   color: var(--text-muted);
-}
-
-/* ── Mobile breakpoint ───────────────────────────────── */
-@media (max-width: 768px) {
-  .nav {
-    display: block;
-  }
-
-  .main {
-    padding: 16px;
-  }
-
-  .layout {
-    grid-template-columns: 1fr;
-  }
-
-  .hideMobile {
-    display: none;
-  }
-
-  .sidebar {
-    position: static;
-  }
 }

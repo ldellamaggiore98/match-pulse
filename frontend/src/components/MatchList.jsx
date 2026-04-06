@@ -10,12 +10,14 @@ function toARTDateString(isoDate) {
 
 function formatDateLabel(dateStr) {
   const todayStr = toARTDateString(new Date().toISOString());
+  const yesterdayStr = toARTDateString(new Date(Date.now() - 86400000).toISOString());
   const tomorrowStr = toARTDateString(new Date(Date.now() + 86400000).toISOString());
 
+  if (dateStr === yesterdayStr) return 'Ayer';
   if (dateStr === todayStr) return 'Hoy';
   if (dateStr === tomorrowStr) return 'Mañana';
 
-  const [year, month, day] = dateStr.split('-');
+  const [, month, day] = dateStr.split('-');
   return `${day}/${month}`;
 }
 

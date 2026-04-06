@@ -2,91 +2,79 @@
   background: var(--bg-card);
   border: 1px solid var(--border);
   border-radius: var(--radius);
-  padding: 16px 20px;
-  transition: background 0.15s;
+  padding: 16px 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  transition: background 0.15s, border-color 0.15s;
 }
 
 .card:hover {
   background: var(--bg-card-hover);
 }
 
-.card.live {
+.cardLive {
   border-color: var(--live);
   background: var(--live-dim);
 }
 
-/* Live bar */
-.liveBar {
+/* ── Status row ─────────────────────────────────────── */
+.statusRow {
   display: flex;
   align-items: center;
-  gap: 6px;
-  margin-bottom: 12px;
+}
+
+.liveTag {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--live);
 }
 
 .liveDot {
-  width: 7px;
-  height: 7px;
+  width: 6px;
+  height: 6px;
   border-radius: 50%;
   background: var(--live);
   animation: pulse 1.2s ease-in-out infinite;
 }
 
-.liveLabel {
+.ftTag {
   font-size: 11px;
-  font-weight: 700;
-  color: var(--live);
-  letter-spacing: 0.08em;
+  font-weight: 600;
+  letter-spacing: 0.06em;
   text-transform: uppercase;
+  color: var(--text-muted);
 }
 
-/* Meta (date/time or finished) */
-.meta {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  margin-bottom: 12px;
-}
-
-.date {
+.datetime {
   font-size: 12px;
+  color: var(--text-muted);
+}
+
+.sep {
   color: var(--text-muted);
 }
 
 .time {
-  font-size: 12px;
   font-weight: 600;
   color: var(--accent);
 }
 
-.finished {
-  font-size: 11px;
-  font-weight: 600;
-  color: var(--text-muted);
-  text-transform: uppercase;
-  letter-spacing: 0.06em;
-}
-
-/* Teams row */
-.teams {
+/* ── Match row ──────────────────────────────────────── */
+.matchRow {
   display: grid;
-  grid-template-columns: 1fr 32px 1fr;
+  grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
   align-items: center;
-  gap: 8px;
-}
-
-.team {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
-
-.away {
-  flex-direction: row-reverse;
-  text-align: right;
+  gap: 16px;
 }
 
 .teamName {
-  font-size: 14px;
+  font-size: 15px;
   font-weight: 500;
   color: var(--text-secondary);
   white-space: nowrap;
@@ -94,26 +82,67 @@
   text-overflow: ellipsis;
 }
 
-.winner .teamName {
+.teamRight {
+  text-align: right;
+}
+
+.winner {
   color: var(--text-primary);
   font-weight: 600;
 }
 
-.score {
-  font-size: 22px;
-  font-weight: 700;
-  color: var(--text-primary);
-  min-width: 24px;
-  text-align: center;
+.loser {
+  color: var(--text-muted);
 }
 
-.live .score {
+/* ── Center block ───────────────────────────────────── */
+.centerBlock {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.scoreBlock {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: var(--bg-secondary);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 6px 14px;
+}
+
+.score {
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--text-secondary);
+  min-width: 18px;
+  text-align: center;
+  line-height: 1;
+}
+
+.scoreWinner {
+  color: var(--text-primary);
+}
+
+.cardLive .score {
   color: var(--live);
 }
 
-.vs {
-  text-align: center;
-  font-size: 12px;
+.scoreDash {
+  font-size: 14px;
   color: var(--text-muted);
-  font-weight: 500;
+  font-weight: 400;
+}
+
+.vs {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  color: var(--text-muted);
+  background: var(--bg-secondary);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 5px 12px;
 }

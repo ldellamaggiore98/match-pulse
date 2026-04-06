@@ -7,11 +7,18 @@ datasource db {
 }
 
 model Standing {
-  id        Int      @id @default(autoincrement())
-  team      String
-  points    String
-  group     String
-  createdAt DateTime @default(now())
+  id           Int      @id @default(autoincrement())
+  team         String
+  group        String
+  played       Int      @default(0)
+  won          Int      @default(0)
+  drawn        Int      @default(0)
+  lost         Int      @default(0)
+  goalsFor     Int      @default(0)
+  goalsAgainst Int      @default(0)
+  points       Int      @default(0)
+  form         String   @default("")
+  createdAt    DateTime @default(now())
 }
 
 model Match {

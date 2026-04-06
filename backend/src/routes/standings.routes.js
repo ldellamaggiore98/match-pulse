@@ -15,7 +15,7 @@ router.get("/update", async (req, res) => {
     await prisma.standing.deleteMany();
     await prisma.standing.createMany({ data });
 
-    res.json({ message: "Standings updated successfully" });
+    res.json({ message: "Standings updated successfully", sample: data[0] });
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: "Error updating standings" });

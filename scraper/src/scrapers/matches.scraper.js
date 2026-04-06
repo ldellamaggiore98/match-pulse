@@ -29,10 +29,14 @@ function parseMatchDate(timeText) {
   return new Date().toISOString();
 }
 
-// Derives a normalized status string from the match row class list.
-function parseStatus(classList) {
+// Derives a normalized status string from the match row class list and parsed date.
+function parseStatus(classList, matchDate) {
   if (classList.includes("event__match--live")) return "LIVE";
-  if (classList.includes("event__match--scheduled")) return "NS";
+  if (classList.includes("event__match--scheduled")) {
+    // Flashscore also marks finished matches as "scheduled" in the fixture view,
+    // so we fall back to the date to decide the real status.
+    return new Date(matchDate) <= new Date() ? "FT" : "NS";
+  }
   return "FT";
 }
 
@@ -103,9 +107,9 @@ export const getMatches = async () => {
       awayTeam: m.awayTeam,
       homeScore: isNaN(m.homeScore) ? null : m.homeScore,
       awayScore: isNaN(m.awayScore) ? null : m.awayScore,
-      status: parseStatus(m.classList),
-      minute: m.minute,
       matchDate: parseMatchDate(m.timeText ?? ""),
+      status: parseStatus(m.classList, parseMatchDate(m.timeText ?? "")),
+      minute: m.minute,
       competition: "Liga Profesional",
     }));
 };
