@@ -6,6 +6,12 @@ import { MatchList } from './components/MatchList';
 import { StandingsTable } from './components/StandingsTable';
 import styles from './App.module.css';
 
+const COMPETITIONS = [
+  { id: 'liga-profesional', label: 'Liga Profesional' },
+  { id: 'copa-argentina',   label: 'Copa Argentina'   },
+  { id: 'copa-libertadores', label: 'Copa Libertadores' },
+];
+
 const STANDINGS_TABS = [
   { id: 'apertura',  label: 'Apertura'    },
   { id: 'anual',     label: 'Tabla Anual' },
@@ -13,12 +19,15 @@ const STANDINGS_TABS = [
 ];
 
 export default function App() {
+  const [competition, setCompetition]   = useState('liga-profesional');
   const [mainTab, setMainTab]           = useState('matches');
   const [standingsTab, setStandingsTab] = useState('apertura');
 
   const { matches, loading: matchesLoading, connected } = useMatches();
   const { standings, loading: standingsLoading }        = useStandings(standingsTab);
   const logos                                           = useLogos();
+
+  const isLiga = competition === 'liga-profesional';
 
   return (
     <div className={styles.app}>
@@ -49,36 +58,58 @@ export default function App() {
         </div>
       </header>
 
-      <main className={styles.main}>
-        {mainTab === 'matches' && (
-          <div className={styles.matchesLayout}>
-            <section className={styles.column}>
-              <h2 className={styles.columnTitle}>Liga Profesional</h2>
-              <MatchList matches={matches} loading={matchesLoading} logos={logos} />
-            </section>
-          </div>
-        )}
+      <div className={styles.body}>
+        <aside className={styles.sidebar}>
+          <p className={styles.sidebarTitle}>Competiciones</p>
+          <nav>
+            {COMPETITIONS.map((c) => (
+              <button
+                key={c.id}
+                className={`${styles.sidebarItem} ${competition === c.id ? styles.sidebarActive : ''}`}
+                onClick={() => setCompetition(c.id)}
+              >
+                {c.label}
+              </button>
+            ))}
+          </nav>
+        </aside>
 
-        {mainTab === 'standings' && (
-          <div className={styles.standingsLayout}>
-            <div className={styles.standingsHeader}>
-              <h2 className={styles.columnTitle}>Posiciones — Liga Profesional</h2>
-              <nav className={styles.subtabs}>
-                {STANDINGS_TABS.map((t) => (
-                  <button
-                    key={t.id}
-                    className={`${styles.subtabBtn} ${standingsTab === t.id ? styles.subtabActive : ''}`}
-                    onClick={() => setStandingsTab(t.id)}
-                  >
-                    {t.label}
-                  </button>
-                ))}
-              </nav>
+        <main className={styles.main}>
+          {!isLiga ? (
+            <div className={styles.comingSoon}>
+              <p className={styles.comingSoonText}>Próximamente</p>
+              <p className={styles.comingSoonSub}>
+                {COMPETITIONS.find((c) => c.id === competition)?.label} estará disponible pronto.
+              </p>
             </div>
-            <StandingsTable standings={standings} loading={standingsLoading} />
-          </div>
-        )}
-      </main>
+          ) : mainTab === 'matches' ? (
+            <div className={styles.matchesLayout}>
+              <section className={styles.column}>
+                <h2 className={styles.columnTitle}>Liga Profesional</h2>
+                <MatchList matches={matches} loading={matchesLoading} logos={logos} />
+              </section>
+            </div>
+          ) : (
+            <div className={styles.standingsLayout}>
+              <div className={styles.standingsHeader}>
+                <h2 className={styles.columnTitle}>Posiciones — Liga Profesional</h2>
+                <nav className={styles.subtabs}>
+                  {STANDINGS_TABS.map((t) => (
+                    <button
+                      key={t.id}
+                      className={`${styles.subtabBtn} ${standingsTab === t.id ? styles.subtabActive : ''}`}
+                      onClick={() => setStandingsTab(t.id)}
+                    >
+                      {t.label}
+                    </button>
+                  ))}
+                </nav>
+              </div>
+              <StandingsTable standings={standings} loading={standingsLoading} />
+            </div>
+          )}
+        </main>
+      </div>
     </div>
   );
 }
