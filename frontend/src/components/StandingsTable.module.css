@@ -60,6 +60,15 @@
   border-left: 2px solid var(--accent);
 }
 
+/* Relegated last place — red left accent */
+.table tbody tr.relegated td {
+  color: var(--text-muted);
+}
+
+.table tbody tr.relegated td:first-child {
+  border-left: 2px solid var(--live);
+}
+
 /* Columns */
 .colRank {
   width: 36px;
@@ -73,6 +82,19 @@
   color: var(--text-primary) !important;
   white-space: nowrap;
   padding-left: 16px !important;
+}
+
+.teamCell {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.teamLogo {
+  width: 20px;
+  height: 20px;
+  object-fit: contain;
+  flex-shrink: 0;
 }
 
 .table th.colTeam {

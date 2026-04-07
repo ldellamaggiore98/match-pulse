@@ -1,14 +1,24 @@
 import { useState } from 'react';
 import { useMatches } from './hooks/useMatches';
 import { useStandings } from './hooks/useStandings';
+import { useLogos } from './hooks/useLogos';
 import { MatchList } from './components/MatchList';
 import { StandingsTable } from './components/StandingsTable';
 import styles from './App.module.css';
 
+const STANDINGS_TABS = [
+  { id: 'apertura',  label: 'Apertura'    },
+  { id: 'anual',     label: 'Tabla Anual' },
+  { id: 'promedios', label: 'Promedios'   },
+];
+
 export default function App() {
-  const [tab, setTab] = useState('matches');
+  const [mainTab, setMainTab]           = useState('matches');
+  const [standingsTab, setStandingsTab] = useState('apertura');
+
   const { matches, loading: matchesLoading, connected } = useMatches();
-  const { standings, loading: standingsLoading } = useStandings();
+  const { standings, loading: standingsLoading }        = useStandings(standingsTab);
+  const logos                                           = useLogos();
 
   return (
     <div className={styles.app}>
@@ -20,14 +30,14 @@ export default function App() {
           </div>
           <nav className={styles.tabs}>
             <button
-              className={`${styles.tabBtn} ${tab === 'matches' ? styles.tabActive : ''}`}
-              onClick={() => setTab('matches')}
+              className={`${styles.tabBtn} ${mainTab === 'matches' ? styles.tabActive : ''}`}
+              onClick={() => setMainTab('matches')}
             >
               Partidos
             </button>
             <button
-              className={`${styles.tabBtn} ${tab === 'standings' ? styles.tabActive : ''}`}
-              onClick={() => setTab('standings')}
+              className={`${styles.tabBtn} ${mainTab === 'standings' ? styles.tabActive : ''}`}
+              onClick={() => setMainTab('standings')}
             >
               Posiciones
             </button>
@@ -40,18 +50,31 @@ export default function App() {
       </header>
 
       <main className={styles.main}>
-        {tab === 'matches' && (
+        {mainTab === 'matches' && (
           <div className={styles.matchesLayout}>
             <section className={styles.column}>
               <h2 className={styles.columnTitle}>Liga Profesional</h2>
-              <MatchList matches={matches} loading={matchesLoading} />
+              <MatchList matches={matches} loading={matchesLoading} logos={logos} />
             </section>
           </div>
         )}
 
-        {tab === 'standings' && (
+        {mainTab === 'standings' && (
           <div className={styles.standingsLayout}>
-            <h2 className={styles.columnTitle}>Posiciones — Liga Profesional</h2>
+            <div className={styles.standingsHeader}>
+              <h2 className={styles.columnTitle}>Posiciones — Liga Profesional</h2>
+              <nav className={styles.subtabs}>
+                {STANDINGS_TABS.map((t) => (
+                  <button
+                    key={t.id}
+                    className={`${styles.subtabBtn} ${standingsTab === t.id ? styles.subtabActive : ''}`}
+                    onClick={() => setStandingsTab(t.id)}
+                  >
+                    {t.label}
+                  </button>
+                ))}
+              </nav>
+            </div>
             <StandingsTable standings={standings} loading={standingsLoading} />
           </div>
         )}

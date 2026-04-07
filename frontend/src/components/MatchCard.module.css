@@ -73,6 +73,13 @@
   gap: 16px;
 }
 
+.teamBlock {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 0;
+}
+
 .teamName {
   font-size: 15px;
   font-weight: 500;
@@ -82,8 +89,15 @@
   text-overflow: ellipsis;
 }
 
+.teamLogo {
+  width: 24px;
+  height: 24px;
+  object-fit: contain;
+  flex-shrink: 0;
+}
+
 .teamRight {
-  text-align: right;
+  justify-content: flex-end;
 }
 
 .winner {

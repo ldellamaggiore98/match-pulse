@@ -13,10 +13,18 @@ function FormBadge({ result }) {
   );
 }
 
-function Table({ title, rows }) {
+const TABLE_LABELS = {
+  apertura:  (group) => `Grupo ${group}`,
+  anual:     () => 'Tabla Anual',
+  promedios: () => 'Promedios',
+};
+
+function Table({ title, rows, tableType }) {
+  const showRelegation = tableType === 'anual' || tableType === 'promedios';
+  const groupLabel = (TABLE_LABELS[tableType] ?? TABLE_LABELS.apertura)(title);
   return (
     <div className={styles.group}>
-      <div className={styles.groupTitle}>Grupo {title}</div>
+      <div className={styles.groupTitle}>{groupLabel}</div>
       <table className={styles.table}>
         <thead>
           <tr>
@@ -37,10 +45,19 @@ function Table({ title, rows }) {
           {rows.map((row, i) => {
             const diff = row.goalsFor - row.goalsAgainst;
             const form = row.form ? row.form.split(',').filter(Boolean) : [];
+            const isLast = i === rows.length - 1;
+            const rowClass = showRelegation && isLast
+              ? styles.relegated
+              : i < 4 ? styles.qualified : '';
             return (
-              <tr key={row.id ?? i} className={i < 4 ? styles.qualified : ''}>
+              <tr key={row.id ?? i} className={rowClass}>
                 <td className={styles.colRank}>{i + 1}</td>
-                <td className={styles.colTeam}>{row.team}</td>
+                <td className={styles.colTeam}>
+                  <div className={styles.teamCell}>
+                    {row.logo && <img src={row.logo} alt={row.team} className={styles.teamLogo} />}
+                    <span>{row.team}</span>
+                  </div>
+                </td>
                 <td className={styles.colNum}>{row.played}</td>
                 <td className={styles.colNum}>{row.won}</td>
                 <td className={styles.colNum}>{row.drawn}</td>
@@ -76,8 +93,8 @@ export function StandingsTable({ standings, loading }) {
 
   return (
     <div className={styles.wrapper}>
-      {standings.groupA.length > 0 && <Table title="A" rows={standings.groupA} />}
-      {standings.groupB.length > 0 && <Table title="B" rows={standings.groupB} />}
+      {standings.groupA.length > 0 && <Table title="A" rows={standings.groupA} tableType={standings.tableType} />}
+      {standings.groupB.length > 0 && <Table title="B" rows={standings.groupB} tableType={standings.tableType} />}
     </div>
   );
 }

@@ -28,7 +28,7 @@ const STATUS_FILTERS = [
   { id: 'FT',       label: 'Finalizados' },
 ];
 
-function Section({ title, matches, accent }) {
+function Section({ title, matches, accent, logos }) {
   if (matches.length === 0) return null;
   return (
     <div className={styles.section}>
@@ -37,13 +37,13 @@ function Section({ title, matches, accent }) {
         <span className={styles.count}>{matches.length}</span>
       </h2>
       <div className={styles.list}>
-        {matches.map((m) => <MatchCard key={m.flashscoreId} match={m} />)}
+        {matches.map((m) => <MatchCard key={m.flashscoreId} match={m} logos={logos} />)}
       </div>
     </div>
   );
 }
 
-export function MatchList({ matches, loading }) {
+export function MatchList({ matches, loading, logos = {} }) {
   const all = useMemo(
     () => [...matches.live, ...matches.upcoming, ...matches.finished],
     [matches]
@@ -121,9 +121,9 @@ export function MatchList({ matches, loading }) {
         </div>
       ) : (
         <div className={styles.sections}>
-          <Section title="En vivo"    matches={live}     accent="var(--live)" />
-          <Section title="Próximos"   matches={upcoming} accent="var(--accent)" />
-          <Section title="Finalizados" matches={finished} accent="var(--text-muted)" />
+          <Section title="En vivo"     matches={live}     accent="var(--live)"       logos={logos} />
+          <Section title="Próximos"    matches={upcoming} accent="var(--accent)"     logos={logos} />
+          <Section title="Finalizados" matches={finished} accent="var(--text-muted)" logos={logos} />
         </div>
       )}
     </div>

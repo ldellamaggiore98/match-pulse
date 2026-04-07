@@ -17,7 +17,7 @@ function formatDate(isoDate) {
   });
 }
 
-export function MatchCard({ match }) {
+export function MatchCard({ match, logos = {} }) {
   const { homeTeam, awayTeam, homeScore, awayScore, status, minute, matchDate } = match;
   const isLive = status === 'LIVE';
   const isFinished = status === 'FT';
@@ -49,9 +49,10 @@ export function MatchCard({ match }) {
 
       {/* Main match row */}
       <div className={styles.matchRow}>
-        <span className={`${styles.teamName} ${homeWins ? styles.winner : ''} ${awayWins ? styles.loser : ''}`}>
-          {homeTeam}
-        </span>
+        <div className={`${styles.teamBlock} ${homeWins ? styles.winner : ''} ${awayWins ? styles.loser : ''}`}>
+          {logos[homeTeam] && <img src={logos[homeTeam]} alt={homeTeam} className={styles.teamLogo} />}
+          <span className={styles.teamName}>{homeTeam}</span>
+        </div>
 
         <div className={styles.centerBlock}>
           {(isLive || isFinished) ? (
@@ -65,9 +66,10 @@ export function MatchCard({ match }) {
           )}
         </div>
 
-        <span className={`${styles.teamName} ${styles.teamRight} ${awayWins ? styles.winner : ''} ${homeWins ? styles.loser : ''}`}>
-          {awayTeam}
-        </span>
+        <div className={`${styles.teamBlock} ${styles.teamRight} ${awayWins ? styles.winner : ''} ${homeWins ? styles.loser : ''}`}>
+          <span className={styles.teamName}>{awayTeam}</span>
+          {logos[awayTeam] && <img src={logos[awayTeam]} alt={awayTeam} className={styles.teamLogo} />}
+        </div>
       </div>
 
     </div>

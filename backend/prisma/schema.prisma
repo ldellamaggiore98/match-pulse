@@ -8,6 +8,7 @@ datasource db {
 
 model Standing {
   id           Int      @id @default(autoincrement())
+  tableType    String   @default("apertura")
   team         String
   group        String
   played       Int      @default(0)
@@ -18,6 +19,7 @@ model Standing {
   goalsAgainst Int      @default(0)
   points       Int      @default(0)
   form         String   @default("")
+  logo         String   @default("")
   createdAt    DateTime @default(now())
 }
 

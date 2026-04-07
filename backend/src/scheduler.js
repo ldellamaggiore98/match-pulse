@@ -1,5 +1,5 @@
 import cron from "node-cron";
-import { getStandings } from "../../scraper/src/scrapers/standings.scraper.js";
+import { getAllStandings } from "../../scraper/src/scrapers/standings.scraper.js";
 import { getMatches } from "../../scraper/src/scrapers/matches.scraper.js";
 import { prisma } from "./lib/prisma.js";
 import { io } from "./server.js";
@@ -10,11 +10,11 @@ let livePollingInterval = null;
 
 async function updateStandings() {
   try {
-    console.log("[scheduler] Updating standings...");
-    const data = await getStandings();
+    console.log("[scheduler] Updating all standings tables...");
+    const data = await getAllStandings();
     await prisma.standing.deleteMany();
     await prisma.standing.createMany({ data });
-    console.log("[scheduler] Standings updated.");
+    console.log(`[scheduler] Standings updated (${data.length} rows).`);
   } catch (error) {
     console.error("[scheduler] Failed to update standings:", error.message);
   }

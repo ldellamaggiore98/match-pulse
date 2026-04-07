@@ -1,9 +1,17 @@
 {
   "name": "matchpulse",
   "private": true,
-  "workspaces": ["backend", "scraper"],
+  "workspaces": [
+    "backend",
+    "scraper",
+    "frontend"
+  ],
   "scripts": {
+    "dev": "concurrently -n backend,frontend -c cyan,magenta \"npm run dev -w backend\" \"npm run dev -w frontend\"",
     "start": "sh start.sh",
     "postinstall": "cd backend && npx prisma generate && npx prisma migrate deploy"
+  },
+  "devDependencies": {
+    "concurrently": "^9.2.1"
   }
 }
